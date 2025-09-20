@@ -59,12 +59,12 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/${{ github.repository_owner }}/store:latest
-          ghcr.io/${{ github.repository_owner }}/store:${{ github.sha }}
+          ghcr.io/waxes27/store:latest
+          ghcr.io/waxes27/store:${{ github.sha }}
         labels: |
           org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-        cache-from: type=registry,ref=ghcr.io/${{ github.repository_owner }}/store:buildcache
-        cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/store:buildcache,mode=max
+        cache-from: type=registry,ref=ghcr.io/waxes27/store:buildcache
+        cache-to: type=registry,ref=ghcr.io/waxes27/store:buildcache,mode=max
     
     - name: Image digest output
       run: echo "Image pushed to GHCR with tags -- ghcr.io/${{ github.repository_owner }}/store:latest and ghcr.io/${{ github.repository_owner }}/store:${{ github.sha }}"
