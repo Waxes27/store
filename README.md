@@ -27,9 +27,17 @@ docker run -d \
 ```
 
 # Running the application
+
+## Using Gradle
 You should be able to run the service using
 ```shell
 ./gradlew bootRun
+```
+
+## Using Docker Compose
+You can also run the application using Docker Compose, which will start both the application and the PostgreSQL database:
+```shell
+docker-compose up -d
 ```
 
 The application uses Liquibase to migrate the schema. Some sample data is provided. You can create more data by reading the documentation in utils/README.md
@@ -61,12 +69,40 @@ The API is documented in the OpenAPI file OpenAPI.yaml. Note that this spec incl
         * In both cases, also return a list of the order IDs which contain those products
       * Change the orders endpoint to return a list of products contained in the order
 
-# Bonus points
-1. Implement a CI pipeline on the platform of your choice to build the project and deliver it as a Dockerized image
+# CI/CD Pipeline
+
+A CI/CD pipeline has been implemented using GitHub Actions. The pipeline:
+
+1. Builds the application
+2. Runs tests
+3. Generates a test coverage report
+4. Checks code style
+5. Builds a Docker image
+6. Pushes the Docker image to Docker Hub
+
+The pipeline is defined in `.github/workflows/ci.yml`.
+
+## Docker
+
+The application has been containerized using Docker. The Dockerfile uses a multi-stage build approach to optimize the image size and build process:
+
+1. The first stage builds the application using Gradle
+2. The second stage creates a runtime image with only the necessary components
+
+The Docker image includes a health check that verifies the application is running correctly.
+
+To build the Docker image locally:
+```shell
+docker build -t store:latest .
+```
+
+To run the Docker image locally:
+```shell
+docker run -p 8080:8080 --name store-app store:latest
+```
 
 # Notes on the tasks
 Assume that the project represents a production application.
 Think carefully about the impact on performance when implementing your changes
 The specifications of the tasks have been left deliberately vague. You will be required to exercise judgement about what to deliver - in a real world environment, you would clarify these points in refinement, but since this is a project to be completed without interaction, feel free to make assumptions - but be prepared to defend them when asked.
-There's no CI pipeline associated with this project, but in reality there would be. Consider the things that you would expect that pipeline to verify before allowing your code to be promoted
 Feel free to refactor the codebase if necessary. Bad choices were deliberately made when creating this project.
