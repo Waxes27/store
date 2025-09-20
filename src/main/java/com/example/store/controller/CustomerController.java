@@ -1,33 +1,39 @@
 package com.example.store.controller;
 
-import com.example.store.dto.CustomerDTO;
+import com.example.store.controller.interfaces.CustomerControllerInterface;
+import com.example.store.dto.customer.CustomerCreateDTO;
+import com.example.store.dto.customer.CustomerDTO;
 import com.example.store.entity.Customer;
 import com.example.store.mapper.CustomerMapper;
-import com.example.store.repository.CustomerRepository;
+import com.example.store.service.CustomerService;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/customer")
 @RequiredArgsConstructor
-public class CustomerController {
+public class CustomerController implements CustomerControllerInterface {
 
-    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
     private final CustomerMapper customerMapper;
 
-    @GetMapping
+    // TODO look at getting latency down ( Caching )
+    @Override
     public List<CustomerDTO> getAllCustomers() {
-        return customerMapper.customersToCustomerDTOs(customerRepository.findAll());
+        return customerMapper.customersToCustomerDTOs(customerService.findAllCustomers());
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CustomerDTO createCustomer(@RequestBody Customer customer) {
-        return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
+    @Override
+    public CustomerDTO createCustomer(@RequestBody CustomerCreateDTO customer) {
+        Customer savedCustomer = customerService.saveCustomer(customerMapper.customerCreateDTOtoCustomer(customer));
+        return customerMapper.customerToCustomerDTO(savedCustomer);
+    }
+
+    @Override
+    public List<CustomerDTO> getCustomerByName(@RequestParam String customerName) {
+        return customerMapper.customersToCustomerDTOs(customerService.findCustomerByName(customerName));
     }
 }

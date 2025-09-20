@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: 2-product
+      id: 4-data
       author: developer@securitease.com
       changes:
         - sqlFile:
-            path: db/changelog/sql/create-product-table.sql
+            path: db/changelog/sql/data.sql

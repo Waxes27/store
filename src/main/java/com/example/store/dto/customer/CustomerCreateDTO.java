@@ -1,9 +1,9 @@
-package com.example.store.dto;
+package com.example.store.dto.customer;
 
 import lombok.Data;
 
 @Data
-public class OrderCustomerDTO {
+public class CustomerCreateDTO {
     private Long id;
     private String name;
 }

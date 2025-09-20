@@ -1,0 +1,19 @@
+version: '3.8'
+name: SecuritEase
+services:
+  postgres:
+    image: postgres:16.2
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=store
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    command: postgres -c wal_level=logical
+
+volumes:
+  postgres:
