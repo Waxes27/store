@@ -32,12 +32,6 @@ jobs:
     - name: Generate test report
       run: ./gradlew jacocoTestReport
     
-    - name: Upload test report
-      uses: actions/upload-artifact@v3
-      with:
-        name: test-report
-        path: build/reports/jacoco/test/html
-    
     - name: Check code style
       run: ./gradlew spotlessCheck
     
