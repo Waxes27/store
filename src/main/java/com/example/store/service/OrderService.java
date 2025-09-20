@@ -42,7 +42,9 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    @CacheEvict(value = {"orders", "ordersByCustomerId", "ordersByCustomerName", "allOrders"}, allEntries = true)
+    @CacheEvict(
+            value = {"orders", "ordersByCustomerId", "ordersByCustomerName", "allOrders"},
+            allEntries = true)
     public Order saveOrder(OrderCreateDTO orderDTO) {
         Customer customer = customerService.findCustomerById(orderDTO.getCustomerId());
         isProductsVerified(orderDTO.getProductIds());
@@ -55,7 +57,7 @@ public class OrderService {
 
     private void isProductsVerified(List<Long> productIds) {
         for (Long productId : productIds) {
-            if (!productService.productExistsById(productId)){
+            if (!productService.productExistsById(productId)) {
                 throw new IllegalArgumentException("Product with id " + productId + " does not exist");
             }
         }

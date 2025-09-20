@@ -11,7 +11,9 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-    @Mapping(target = "orderIds", expression = "java(product.getOrders().stream().map(order -> order.getId()).toList())")
+    @Mapping(
+            target = "orderIds",
+            expression = "java(product.getOrders().stream().map(order -> order.getId()).toList())")
     ProductDTO productToProductDTO(Product product);
 
     List<ProductDTO> productsToProductDTOs(List<Product> products);

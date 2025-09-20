@@ -20,11 +20,9 @@ public class Product {
 
     private String description;
 
-    @ManyToMany(mappedBy = "products", cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.DETACH }, fetch = FetchType.LAZY)
+    @ManyToMany(
+            mappedBy = "products",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH},
+            fetch = FetchType.LAZY)
     private Set<Order> orders = new LinkedHashSet<>();
-
 }

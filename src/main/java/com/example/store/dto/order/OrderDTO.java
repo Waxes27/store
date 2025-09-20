@@ -1,7 +1,6 @@
 package com.example.store.dto.order;
 
 import com.example.store.dto.product.ProductDTO;
-import com.example.store.entity.Product;
 
 import lombok.Data;
 

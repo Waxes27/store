@@ -35,7 +35,9 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    @CacheEvict(value = {"customers", "allCustomers", "customersByName"}, allEntries = true)
+    @CacheEvict(
+            value = {"customers", "allCustomers", "customersByName"},
+            allEntries = true)
     public Customer saveCustomer(Customer customer) {
         Optional<Customer> dbCustomer = customerRepository.findById(customer.getId());
 
@@ -45,7 +47,9 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    @CacheEvict(value = {"customers", "allCustomers", "customersByName"}, allEntries = true)
+    @CacheEvict(
+            value = {"customers", "allCustomers", "customersByName"},
+            allEntries = true)
     public void updateCustomerOrder(Order order, Long customerId) {
         Optional<Customer> dbCustomer = customerRepository.findById(customerId);
         if (dbCustomer.isEmpty()) {
