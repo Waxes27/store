@@ -32,7 +32,9 @@ public class CustomerService {
         return customerRepository.findByNameContainingIgnoreCase(potentialCustomerName);
     }
 
-    @Cacheable(value = "customersByNamePaginated", key = "#potentialCustomerName + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    @Cacheable(
+            value = "customersByNamePaginated",
+            key = "#potentialCustomerName + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<Customer> findCustomerByName(String potentialCustomerName, Pageable pageable) {
         return customerRepository.findByNameContainingIgnoreCase(potentialCustomerName, pageable);
     }
@@ -48,7 +50,8 @@ public class CustomerService {
     }
 
     @CacheEvict(
-            value = {"customers", "allCustomers", "customersByName", "allCustomersPaginated", "customersByNamePaginated"},
+            value = {"customers", "allCustomers", "customersByName", "allCustomersPaginated", "customersByNamePaginated"
+            },
             allEntries = true)
     public Customer saveCustomer(Customer customer) {
         Optional<Customer> dbCustomer = customerRepository.findById(customer.getId());
@@ -60,7 +63,8 @@ public class CustomerService {
     }
 
     @CacheEvict(
-            value = {"customers", "allCustomers", "customersByName", "allCustomersPaginated", "customersByNamePaginated"},
+            value = {"customers", "allCustomers", "customersByName", "allCustomersPaginated", "customersByNamePaginated"
+            },
             allEntries = true)
     public void updateCustomerOrder(Order order, Long customerId) {
         Optional<Customer> dbCustomer = customerRepository.findById(customerId);

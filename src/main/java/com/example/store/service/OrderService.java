@@ -34,7 +34,9 @@ public class OrderService {
         return orderRepository.findAllByCustomerId(customerId);
     }
 
-    @Cacheable(value = "ordersByCustomerIdPaginated", key = "#customerId + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    @Cacheable(
+            value = "ordersByCustomerIdPaginated",
+            key = "#customerId + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<Order> findAllCustomerOrdersByCustomerId(Long customerId, Pageable pageable) {
         return orderRepository.findAllByCustomerId(customerId, pageable);
     }
@@ -44,7 +46,9 @@ public class OrderService {
         return orderRepository.findAllByCustomerName(name);
     }
 
-    @Cacheable(value = "ordersByCustomerNamePaginated", key = "#name + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    @Cacheable(
+            value = "ordersByCustomerNamePaginated",
+            key = "#name + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
     public Page<Order> findOrdersByCustomerName(String name, Pageable pageable) {
         return orderRepository.findAllByCustomerName(name, pageable);
     }
@@ -60,8 +64,15 @@ public class OrderService {
     }
 
     @CacheEvict(
-            value = {"orders", "ordersByCustomerId", "ordersByCustomerName", "allOrders", 
-                    "ordersByCustomerIdPaginated", "ordersByCustomerNamePaginated", "allOrdersPaginated"},
+            value = {
+                "orders",
+                "ordersByCustomerId",
+                "ordersByCustomerName",
+                "allOrders",
+                "ordersByCustomerIdPaginated",
+                "ordersByCustomerNamePaginated",
+                "allOrdersPaginated"
+            },
             allEntries = true)
     public Order saveOrder(OrderCreateDTO orderDTO) {
         Customer customer = customerService.findCustomerById(orderDTO.getCustomerId());

@@ -25,6 +25,8 @@ public interface CustomerControllerInterface extends CustomerControllerDefinitio
     @GetMapping("/name")
     public List<CustomerDTO> getCustomerByName(@RequestParam String customerName);
 
-    @GetMapping(path = "/name", params = {"page", "size"})
+    @GetMapping(
+            path = "/name",
+            params = {"page", "size"})
     public Page<CustomerDTO> getCustomerByName(@RequestParam String customerName, Pageable pageable);
 }

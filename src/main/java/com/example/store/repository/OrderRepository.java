@@ -10,8 +10,10 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByCustomerId(Long customerId);
+
     Page<Order> findAllByCustomerId(Long customerId, Pageable pageable);
 
     List<Order> findAllByCustomerName(String customerName);
+
     Page<Order> findAllByCustomerName(String customerName, Pageable pageable);
 }

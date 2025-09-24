@@ -34,7 +34,6 @@ public class ProductController implements ProductControllerInterface {
         return productMapper.productToProductDTO(savedProduct);
     }
 
-
     @Override
     public ProductDTO getProductById(Long id) {
         return productMapper.productToProductDTO(productService.getProductById(id));
