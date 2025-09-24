@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +19,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @CacheEvict(
-            value = {"products", "allProducts", "productExists"},
+            value = {"products", "allProducts", "productExists", "allProductsPaginated"},
             allEntries = true)
     public Product save(Product product) {
         return productRepository.save(product);
@@ -26,6 +28,11 @@ public class ProductService {
     @Cacheable(value = "allProducts")
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    @Cacheable(value = "allProductsPaginated", key = "#pageable.pageNumber + '_' + #pageable.pageSize")
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     @Cacheable(value = "products", key = "#id")

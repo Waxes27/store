@@ -9,6 +9,8 @@ import com.example.store.service.CustomerService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +37,17 @@ public class CustomerController implements CustomerControllerInterface {
     @Override
     public List<CustomerDTO> getCustomerByName(@RequestParam String customerName) {
         return customerMapper.customersToCustomerDTOs(customerService.findCustomerByName(customerName));
+    }
+
+    @Override
+    public Page<CustomerDTO> getAllCustomers(Pageable pageable) {
+        Page<Customer> customerPage = customerService.findAllCustomers(pageable);
+        return customerPage.map(customerMapper::customerToCustomerDTO);
+    }
+
+    @Override
+    public Page<CustomerDTO> getCustomerByName(String customerName, Pageable pageable) {
+        Page<Customer> customerPage = customerService.findCustomerByName(customerName, pageable);
+        return customerPage.map(customerMapper::customerToCustomerDTO);
     }
 }

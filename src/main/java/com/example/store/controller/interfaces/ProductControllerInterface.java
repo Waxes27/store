@@ -4,7 +4,10 @@ import com.example.store.controller.interfaces.openapi.ProductControllerDefiniti
 import com.example.store.dto.product.ProductCreateDTO;
 import com.example.store.dto.product.ProductDTO;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,9 +19,12 @@ public interface ProductControllerInterface extends ProductControllerDefinitions
     @GetMapping
     List<ProductDTO> getAllProducts();
 
+    @GetMapping(params = {"page", "size"})
+    Page<ProductDTO> getAllProducts(Pageable pageable);
+
     @PostMapping
     ProductDTO createProduct(ProductCreateDTO productCreateDTO);
 
     @GetMapping("/{id}")
-    ProductDTO getProductById(Long id);
+    ProductDTO getProductById(@PathVariable Long id);
 }

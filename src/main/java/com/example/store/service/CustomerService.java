@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,13 +32,23 @@ public class CustomerService {
         return customerRepository.findByNameContainingIgnoreCase(potentialCustomerName);
     }
 
+    @Cacheable(value = "customersByNamePaginated", key = "#potentialCustomerName + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    public Page<Customer> findCustomerByName(String potentialCustomerName, Pageable pageable) {
+        return customerRepository.findByNameContainingIgnoreCase(potentialCustomerName, pageable);
+    }
+
     @Cacheable(value = "allCustomers")
     public List<Customer> findAllCustomers() {
         return customerRepository.findAll();
     }
 
+    @Cacheable(value = "allCustomersPaginated", key = "#pageable.pageNumber + '_' + #pageable.pageSize")
+    public Page<Customer> findAllCustomers(Pageable pageable) {
+        return customerRepository.findAll(pageable);
+    }
+
     @CacheEvict(
-            value = {"customers", "allCustomers", "customersByName"},
+            value = {"customers", "allCustomers", "customersByName", "allCustomersPaginated", "customersByNamePaginated"},
             allEntries = true)
     public Customer saveCustomer(Customer customer) {
         Optional<Customer> dbCustomer = customerRepository.findById(customer.getId());
@@ -48,7 +60,7 @@ public class CustomerService {
     }
 
     @CacheEvict(
-            value = {"customers", "allCustomers", "customersByName"},
+            value = {"customers", "allCustomers", "customersByName", "allCustomersPaginated", "customersByNamePaginated"},
             allEntries = true)
     public void updateCustomerOrder(Order order, Long customerId) {
         Optional<Customer> dbCustomer = customerRepository.findById(customerId);

@@ -3,11 +3,14 @@ package com.example.store.controller;
 import com.example.store.controller.interfaces.OrderControllerInterface;
 import com.example.store.dto.order.OrderCreateDTO;
 import com.example.store.dto.order.OrderDTO;
+import com.example.store.entity.Order;
 import com.example.store.mapper.OrderMapper;
 import com.example.store.service.OrderService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,5 +36,11 @@ public class OrderController implements OrderControllerInterface {
     @Override
     public OrderDTO getOrderById(@PathVariable Long id) {
         return orderMapper.orderToOrderDTO(orderService.findOrderById(id));
+    }
+
+    @Override
+    public Page<OrderDTO> getAllOrders(Pageable pageable) {
+        Page<Order> orderPage = orderService.findAllOrders(pageable);
+        return orderPage.map(orderMapper::orderToOrderDTO);
     }
 }

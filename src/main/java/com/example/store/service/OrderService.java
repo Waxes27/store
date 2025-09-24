@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,13 +30,23 @@ public class OrderService {
     }
 
     @Cacheable(value = "ordersByCustomerId", key = "#customerId")
-    public void findAllCustomerOrdersByCustomerId(Long customerId) {
-        orderRepository.findAllByCustomerId(customerId);
+    public List<Order> findAllCustomerOrdersByCustomerId(Long customerId) {
+        return orderRepository.findAllByCustomerId(customerId);
+    }
+
+    @Cacheable(value = "ordersByCustomerIdPaginated", key = "#customerId + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    public Page<Order> findAllCustomerOrdersByCustomerId(Long customerId, Pageable pageable) {
+        return orderRepository.findAllByCustomerId(customerId, pageable);
     }
 
     @Cacheable(value = "ordersByCustomerName", key = "#name")
-    public void findOrdersByCustomerName(String name) {
-        orderRepository.findAllByCustomerName(name);
+    public List<Order> findOrdersByCustomerName(String name) {
+        return orderRepository.findAllByCustomerName(name);
+    }
+
+    @Cacheable(value = "ordersByCustomerNamePaginated", key = "#name + '_' + #pageable.pageNumber + '_' + #pageable.pageSize")
+    public Page<Order> findOrdersByCustomerName(String name, Pageable pageable) {
+        return orderRepository.findAllByCustomerName(name, pageable);
     }
 
     @Cacheable(value = "allOrders")
@@ -42,8 +54,14 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    @Cacheable(value = "allOrdersPaginated", key = "#pageable.pageNumber + '_' + #pageable.pageSize")
+    public Page<Order> findAllOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
     @CacheEvict(
-            value = {"orders", "ordersByCustomerId", "ordersByCustomerName", "allOrders"},
+            value = {"orders", "ordersByCustomerId", "ordersByCustomerName", "allOrders", 
+                    "ordersByCustomerIdPaginated", "ordersByCustomerNamePaginated", "allOrdersPaginated"},
             allEntries = true)
     public Order saveOrder(OrderCreateDTO orderDTO) {
         Customer customer = customerService.findCustomerById(orderDTO.getCustomerId());

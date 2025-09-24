@@ -9,6 +9,8 @@ import com.example.store.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,8 +34,15 @@ public class ProductController implements ProductControllerInterface {
         return productMapper.productToProductDTO(savedProduct);
     }
 
+
     @Override
     public ProductDTO getProductById(Long id) {
         return productMapper.productToProductDTO(productService.getProductById(id));
+    }
+
+    @Override
+    public Page<ProductDTO> getAllProducts(Pageable pageable) {
+        Page<Product> productPage = productService.getAllProducts(pageable);
+        return productPage.map(productMapper::productToProductDTO);
     }
 }

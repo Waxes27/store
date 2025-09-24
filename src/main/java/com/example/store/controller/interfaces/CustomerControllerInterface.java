@@ -4,6 +4,8 @@ import com.example.store.controller.interfaces.openapi.CustomerControllerDefinit
 import com.example.store.dto.customer.CustomerCreateDTO;
 import com.example.store.dto.customer.CustomerDTO;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,9 +16,15 @@ public interface CustomerControllerInterface extends CustomerControllerDefinitio
     @GetMapping
     public List<CustomerDTO> getAllCustomers();
 
+    @GetMapping(params = {"page", "size"})
+    public Page<CustomerDTO> getAllCustomers(Pageable pageable);
+
     @PostMapping
     public CustomerDTO createCustomer(CustomerCreateDTO customer);
 
     @GetMapping("/name")
     public List<CustomerDTO> getCustomerByName(@RequestParam String customerName);
+
+    @GetMapping(path = "/name", params = {"page", "size"})
+    public Page<CustomerDTO> getCustomerByName(@RequestParam String customerName, Pageable pageable);
 }
